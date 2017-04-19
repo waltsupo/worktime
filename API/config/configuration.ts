@@ -10,3 +10,5 @@ const configuration = {
       database: 'dbc5vpouta1'
   }
 };
+
+export = configuration;
