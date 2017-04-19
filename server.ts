@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import json = bodyParser.json;
+import {Routes} from "./API/routes";
 
 const app = express();
 const port = process.env.PORT || 80;
@@ -20,6 +21,8 @@ app.all("/*", (req, res, next) => {
         next();
     }
 });
+let routes: Routes = new Routes();
+app.use('/', routes.getRouter());
 
 app.listen(port, function(){
     console.log('Server listening on port %d', port);
