@@ -1,4 +1,4 @@
-import {Response} from "../Utils/response";
+import {Response} from "../utils/response";
 
 export class ProjectManager {
 
