@@ -7,13 +7,14 @@ export class Routes {
 
     constructor() {
         this.router = express.Router();
+        this.projectManager = new ProjectManager();
 
         // Paths
-        this.router.post('/projects/id/:id', this.projectManager.getProjectWithId());
-        this.router.post('/projects/:identifier', this.projectManager.getProjectWithIdentifier());
-        this.router.post('/projects', this.projectManager.createProject());
-        this.router.post('/projects/:id', this.projectManager.modifyProject());
-        this.router.post('/projects/:id', this.projectManager.deleteProject());
+        this.router.get('/projects/id/:id', this.projectManager.getProjectWithId);
+        this.router.get('/projects/:identifier', this.projectManager.getProjectWithIdentifier);
+        this.router.post('/projects', this.projectManager.createProject);
+        this.router.put('/projects/:id', this.projectManager.modifyProject);
+        this.router.delete('/projects/:id', this.projectManager.deleteProject);
 
     }
 
