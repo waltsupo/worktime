@@ -1,7 +1,7 @@
 // Visible on github for returning this project and getting the system work properly.
 // Database only contains information about this project.
 
-const configuraion = {
+const configuration = {
   database: {
       connectionLimit: 10,
       host: 'mydb.tamk.fi',
