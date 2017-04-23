@@ -14,7 +14,11 @@ export class ProjectManager {
         let sql: string ="SELECT * FROM project WHERE id=?";
         this.database.getPool().query(sql, [req.params.id], (error, results) => {
             if (!error) {
-                Response.send(res, Response.RESOURCE_FOUND, results);
+                if (results.length > 0) {
+                    Response.send(res, Response.RESOURCE_FOUND, results);
+                } else {
+                    Response.send(res, Response.RESOURCE_NOT_FOUND);
+                }
             } else {
                 Response.send(res, Response.INTERNAL_ERROR);
             }
@@ -26,7 +30,11 @@ export class ProjectManager {
         let sql: string ="SELECT * FROM project WHERE identifier=?";
         this.database.getPool().query(sql, [req.params.identifier], (error, results) => {
             if (!error) {
-                Response.send(res, Response.RESOURCE_FOUND, results);
+                if (results.length > 0) {
+                    Response.send(res, Response.RESOURCE_FOUND, results);
+                } else {
+                    Response.send(res, Response.RESOURCE_NOT_FOUND);
+                }
             } else {
                 Response.send(res, Response.INTERNAL_ERROR);
             }
