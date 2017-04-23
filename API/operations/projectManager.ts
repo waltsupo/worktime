@@ -43,7 +43,21 @@ export class ProjectManager {
 
     public createProject = (req: express.Request, res: express.Response) => {
 
-        Response.send(res, Response.RESOURCE_CREATED);
+        if (req.body.name && req.body.identifier) {
+
+            let sql: string ="INSERT INTO project SET ?";
+            this.database.getPool().query(sql, {name: req.body.name, identifier: req.body.identifier,
+                    last_modified: new Date()}, (error, results) => {
+
+                if (!error) {
+                    Response.send(res, Response.RESOURCE_CREATED, {id: results.insertId});
+                } else {
+                    Response.send(res, Response.INTERNAL_ERROR);
+                }
+            });
+        } else {
+            Response.send(res, Response.INVALID_PARAMETERS);
+        }
     };
 
     public modifyProject = (req: express.Request, res: express.Response) => {
