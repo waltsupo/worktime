@@ -12,7 +12,7 @@ export class ProjectManager {
     public getProjectWithId = (req: express.Request, res: express.Response) => {
 
         let sql: string ="SELECT * FROM project WHERE id=?";
-        this.database.getPool().query(sql, [1], (error, results) => {
+        this.database.getPool().query(sql, [req.params.id], (error, results) => {
             if (!error) {
                 Response.send(res, Response.RESOURCE_FOUND, results);
             } else {
