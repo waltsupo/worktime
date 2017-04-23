@@ -1,13 +1,14 @@
 import * as express from 'express';
 import {ProjectManager} from "./operations/projectManager";
+import {Database} from "./config/database";
 
 export class Routes {
     private router: express.Router;
     private projectManager: ProjectManager;
 
-    constructor() {
+    constructor(database: Database) {
         this.router = express.Router();
-        this.projectManager = new ProjectManager();
+        this.projectManager = new ProjectManager(database);
 
         // Paths
         this.router.get('/projects/id/:id', this.projectManager.getProjectWithId);

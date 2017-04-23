@@ -16,29 +16,29 @@ export class Response {
         message: 'Invalid parameters'
     };
 
-    static NOT_FOUND: ResponseObject = {
+    static RESOURCE_NOT_FOUND: ResponseObject = {
         code: 404,
         message: 'Asked resource not found'
     };
 
-    static PROJECT_FOUND: ResponseObject = {
+    static RESOURCE_FOUND: ResponseObject = {
         code: 200,
-        message: "Project found successfully"
+        message: "Resource found successfully"
     };
 
-    static PROJECT_UPDATED: ResponseObject = {
+    static RESOURCE_UPDATED: ResponseObject = {
         code: 200,
-        message: "Project updated successfully"
+        message: "Resource updated successfully"
     };
 
-    static PROJECT_DELETED: ResponseObject = {
+    static RESOURCE_DELETED: ResponseObject = {
         code: 200,
-        message: "Project deleted successfully"
+        message: "Resource deleted successfully"
     };
 
-    static PROJECT_CREATED: ResponseObject = {
+    static RESOURCE_CREATED: ResponseObject = {
         code: 201,
-        message: "Project created successfully"
+        message: "Resource created successfully"
     };
 
     static send(res: express.Response, responseObject: ResponseObject, data?: Object) {

@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import json = bodyParser.json;
 import {Routes} from "./API/routes";
+import {Database} from "./API/config/database";
 
 const app = express();
 const port = process.env.PORT || 80;
@@ -21,7 +22,9 @@ app.all("/*", (req, res, next) => {
         next();
     }
 });
-let routes: Routes = new Routes();
+
+let database = new Database();
+let routes: Routes = new Routes(database);
 app.use('/', routes.getRouter());
 
 app.listen(port, function(){
