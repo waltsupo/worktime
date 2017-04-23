@@ -23,7 +23,14 @@ export class ProjectManager {
 
     public getProjectWithIdentifier = (req: express.Request, res: express.Response) => {
 
-        Response.send(res, Response.RESOURCE_FOUND);
+        let sql: string ="SELECT * FROM project WHERE identifier=?";
+        this.database.getPool().query(sql, [req.params.identifier], (error, results) => {
+            if (!error) {
+                Response.send(res, Response.RESOURCE_FOUND, results);
+            } else {
+                Response.send(res, Response.INTERNAL_ERROR);
+            }
+        });
     };
 
     public createProject = (req: express.Request, res: express.Response) => {
