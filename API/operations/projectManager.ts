@@ -39,15 +39,23 @@ export class ProjectManager {
 
         if (req.body.name && req.body.identifier) {
 
-            let sql: string ="INSERT INTO project SET ?";
-            this.database.getPool().query(sql, {name: req.body.name, identifier: req.body.identifier,
-                    last_modified: new Date()}, (error, results) => {
-
-                if (!error) {
-                    Response.send(res, Response.RESOURCE_CREATED, {id: results.insertId});
+            this.getProjectWithIdentifierPromise(req.body.identifier).then((results) => {
+                if (results.length > 0) {
+                    Response.send(res, Response.RESOURCE_ALREADY_EXISTS);
                 } else {
-                    Response.send(res, Response.INTERNAL_ERROR);
+                    let sql: string ="INSERT INTO project SET ?";
+                    this.database.getPool().query(sql, {name: req.body.name, identifier: req.body.identifier,
+                        last_modified: new Date()}, (error, results) => {
+
+                        if (!error) {
+                            Response.send(res, Response.RESOURCE_CREATED, {id: results.insertId});
+                        } else {
+                            Response.send(res, Response.INTERNAL_ERROR);
+                        }
+                    });
                 }
+            }, () => {
+                Response.send(res, Response.INTERNAL_ERROR);
             });
         } else {
             Response.send(res, Response.INVALID_PARAMETERS);

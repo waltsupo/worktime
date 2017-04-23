@@ -41,6 +41,11 @@ export class Response {
         message: "Resource created successfully"
     };
 
+    static RESOURCE_ALREADY_EXISTS: ResponseObject = {
+        code: 400,
+        message: "Resource already exists with given parameters"
+    };
+
     static send(res: express.Response, responseObject: ResponseObject, data?: Object) {
         if (data) {
             responseObject.data = data;
