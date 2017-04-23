@@ -11,33 +11,27 @@ export class ProjectManager {
 
     public getProjectWithId = (req: express.Request, res: express.Response) => {
 
-        let sql: string ="SELECT * FROM project WHERE id=?";
-        this.database.getPool().query(sql, [req.params.id], (error, results) => {
-            if (!error) {
-                if (results.length > 0) {
-                    Response.send(res, Response.RESOURCE_FOUND, results);
-                } else {
-                    Response.send(res, Response.RESOURCE_NOT_FOUND);
-                }
+        this.getProjectWithIdPromise(req.params.id).then((results) => {
+            if (results.length > 0) {
+                Response.send(res, Response.RESOURCE_FOUND, results);
             } else {
-                Response.send(res, Response.INTERNAL_ERROR);
+                Response.send(res, Response.RESOURCE_NOT_FOUND);
             }
+        }, () => {
+            Response.send(res, Response.INTERNAL_ERROR);
         });
     };
 
     public getProjectWithIdentifier = (req: express.Request, res: express.Response) => {
 
-        let sql: string ="SELECT * FROM project WHERE identifier=?";
-        this.database.getPool().query(sql, [req.params.identifier], (error, results) => {
-            if (!error) {
-                if (results.length > 0) {
-                    Response.send(res, Response.RESOURCE_FOUND, results);
-                } else {
-                    Response.send(res, Response.RESOURCE_NOT_FOUND);
-                }
+        this.getProjectWithIdentifierPromise(req.params.identifier).then((results) => {
+            if (results.length > 0) {
+                Response.send(res, Response.RESOURCE_FOUND, results);
             } else {
-                Response.send(res, Response.INTERNAL_ERROR);
+                Response.send(res, Response.RESOURCE_NOT_FOUND);
             }
+        }, () => {
+            Response.send(res, Response.INTERNAL_ERROR);
         });
     };
 
@@ -68,5 +62,33 @@ export class ProjectManager {
     public deleteProject = (req: express.Request, res: express.Response) => {
 
         Response.send(res, Response.RESOURCE_DELETED);
+    };
+
+    private getProjectWithIdPromise = (id: number) => {
+
+        return new Promise((resolve, reject) => {
+            let sql: string ="SELECT * FROM project WHERE id=?";
+            this.database.getPool().query(sql, id, (error, results) => {
+                if (!error) {
+                    resolve(results);
+                } else {
+                    reject();
+                }
+            });
+        });
+    };
+
+    public getProjectWithIdentifierPromise = (identifier: any) => {
+
+        return new Promise((resolve, reject) => {
+            let sql: string ="SELECT * FROM project WHERE identifier=?";
+            this.database.getPool().query(sql, identifier, (error, results) => {
+                if (!error) {
+                    resolve(results);
+                } else {
+                    reject();
+                }
+            });
+        });
     };
 }
