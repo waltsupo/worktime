@@ -1,5 +1,6 @@
 import {Response} from "../utils/response";
 import {Database} from "../config/database";
+import {isNullOrUndefined} from "util";
 
 export class ProjectManager {
 
@@ -12,7 +13,7 @@ export class ProjectManager {
     public getProjectWithId = (req: express.Request, res: express.Response) => {
 
         this.getProjectWithIdPromise(req.params.id).then((results) => {
-            if (results.length > 0) {
+            if (!isNullOrUndefined(results) && results.length > 0) {
                 Response.send(res, Response.RESOURCE_FOUND, results);
             } else {
                 Response.send(res, Response.RESOURCE_NOT_FOUND);
@@ -25,7 +26,7 @@ export class ProjectManager {
     public getProjectWithIdentifier = (req: express.Request, res: express.Response) => {
 
         this.getProjectWithIdentifierPromise(req.params.identifier).then((results) => {
-            if (results.length > 0) {
+            if (!isNullOrUndefined(results) && results.length > 0) {
                 Response.send(res, Response.RESOURCE_FOUND, results);
             } else {
                 Response.send(res, Response.RESOURCE_NOT_FOUND);
@@ -64,7 +65,34 @@ export class ProjectManager {
 
     public modifyProject = (req: express.Request, res: express.Response) => {
 
-        Response.send(res, Response.RESOURCE_UPDATED);
+        if (req.body.name || req.body.identifier) {
+            let values: any = {};
+            if (req.body.name) {
+                values.name = req.body.name;
+            }
+            if (req.body.identifier) {
+                values.identifier = req.body.identifier;
+            }
+            values.last_modified = new Date();
+
+            let sql: string ="UPDATE project SET ? where id=?";
+            this.database.getPool().query(sql, [values, req.params.id], (error, results) => {
+
+                if (!error) {
+                    if (!isNullOrUndefined(results.affectedRows) && results.affectedRows == 0) {
+                        console.log("true");
+                        Response.send(res, Response.RESOURCE_NOT_FOUND);
+                    } else {
+                        console.log(false);
+                        Response.send(res, Response.RESOURCE_UPDATED);
+                    }
+                } else {
+                    Response.send(res, Response.INTERNAL_ERROR);
+                }
+            });
+        } else {
+            Response.send(res, Response.INVALID_PARAMETERS);
+        }
     };
 
     public deleteProject = (req: express.Request, res: express.Response) => {
