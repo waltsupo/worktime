@@ -111,7 +111,7 @@ export class ProjectManager {
         });
     };
 
-    private getProjectWithIdPromise = (id: number) => {
+    public getProjectWithIdPromise = (id: number) => {
 
         return new Promise((resolve, reject) => {
             let sql: string ="SELECT * FROM project WHERE id=?";
