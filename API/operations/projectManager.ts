@@ -97,7 +97,6 @@ export class ProjectManager {
 
     public deleteProject = (req: express.Request, res: express.Response) => {
 
-        // deleting project that is referred somewhere FAILS
         let sql: string ="DELETE FROM project WHERE id=?";
         this.database.getPool().query(sql, req.params.id, (error, results) => {
             if (!error) {
