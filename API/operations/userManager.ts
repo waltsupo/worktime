@@ -2,7 +2,7 @@ import {Response} from "../utils/response";
 import {Database} from "../config/database";
 import {isNullOrUndefined} from "util";
 
-export class CategoryManager {
+export class UserManager {
 
     database: Database;
 
@@ -10,9 +10,9 @@ export class CategoryManager {
         this.database = database;
     }
 
-    public getCategories = (req: express.Request, res: express.Response) => {
+    public getUsers = (req: express.Request, res: express.Response) => {
 
-        let sql: string ="SELECT * FROM category WHERE projectId=?";
+        let sql: string ="SELECT * FROM user WHERE projectId=?";
         this.database.getPool().query(sql, req.params.projectId, (error, results) => {
             if (!error) {
                 Response.send(res, Response.RESOURCE_FOUND, results);
@@ -22,9 +22,9 @@ export class CategoryManager {
         });
     };
 
-    public getCategory = (req: express.Request, res: express.Response) => {
+    public getUser = (req: express.Request, res: express.Response) => {
 
-        let sql: string ="SELECT * FROM category WHERE id=?";
+        let sql: string ="SELECT * FROM user WHERE id=?";
         this.database.getPool().query(sql, req.params.id, (error, results) => {
             if (!error) {
                 if (!isNullOrUndefined(results) && results.length > 0) {
@@ -38,30 +38,30 @@ export class CategoryManager {
         });
     };
 
-    public createCategory = (req: express.Request, res: express.Response) => {
+    public createUser = (req: express.Request, res: express.Response) => {
 
         if (req.body.name && req.body.projectId) {
 
-            let sql: string ="INSERT INTO category SET ?";
+            let sql: string ="INSERT INTO user SET ?";
             this.database.getPool().query(sql, {name: req.body.name, projectId: req.body.projectId},
                 (error, results) => {
 
-                if (!error) {
-                    Response.send(res, Response.RESOURCE_CREATED, {id: results.insertId});
-                } else {
-                    Response.send(res, Response.INTERNAL_ERROR);
-                }
-            });
+                    if (!error) {
+                        Response.send(res, Response.RESOURCE_CREATED, {id: results.insertId});
+                    } else {
+                        Response.send(res, Response.INTERNAL_ERROR);
+                    }
+                });
         } else {
             Response.send(res, Response.INVALID_PARAMETERS);
         }
     };
 
-    public modifyCategory = (req: express.Request, res: express.Response) => {
+    public modifyUser = (req: express.Request, res: express.Response) => {
 
         if (req.body.name) {
 
-            let sql: string ="UPDATE category SET ? WHERE id=?";
+            let sql: string ="UPDATE user SET ? WHERE id=?";
             this.database.getPool().query(sql, [{name: req.body.name}, req.params.id], (error, results) => {
 
                 if (!error) {
@@ -79,9 +79,9 @@ export class CategoryManager {
         }
     };
 
-    public deleteCategory = (req: express.Request, res: express.Response) => {
+    public deleteUser = (req: express.Request, res: express.Response) => {
 
-        let sql: string ="DELETE FROM category WHERE id=?";
+        let sql: string ="DELETE FROM user WHERE id=?";
         this.database.getPool().query(sql, req.params.id, (error, results) => {
             if (!error) {
                 if (!isNullOrUndefined(results.affectedRows) && results.affectedRows == 0) {
