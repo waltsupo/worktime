@@ -11,6 +11,18 @@ export class CategoryManager {
         this.database = database;
     }
 
+    public getCategories = (req: express.Request, res: express.Response) => {
+
+        let sql: string ="SELECT * FROM category";
+        this.database.getPool().query(sql, req.params.id, (error, results) => {
+            if (!error) {
+                Response.send(res, Response.RESOURCE_FOUND, results);
+            } else {
+                Response.send(res, Response.INTERNAL_ERROR);
+            }
+        });
+    };
+
     public getCategory = (req: express.Request, res: express.Response) => {
 
         let sql: string ="SELECT * FROM category WHERE id=?";
