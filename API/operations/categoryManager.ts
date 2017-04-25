@@ -13,8 +13,8 @@ export class CategoryManager {
 
     public getCategories = (req: express.Request, res: express.Response) => {
 
-        let sql: string ="SELECT * FROM category";
-        this.database.getPool().query(sql, req.params.id, (error, results) => {
+        let sql: string ="SELECT * FROM category WHERE projectId=?";
+        this.database.getPool().query(sql, req.params.projectId, (error, results) => {
             if (!error) {
                 Response.send(res, Response.RESOURCE_FOUND, results);
             } else {
