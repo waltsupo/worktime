@@ -75,7 +75,7 @@ export class ProjectManager {
             }
             values.last_modified = new Date();
 
-            let sql: string ="UPDATE project SET ? where id=?";
+            let sql: string ="UPDATE project SET ? WHERE id=?";
             this.database.getPool().query(sql, [values, req.params.id], (error, results) => {
 
                 if (!error) {
@@ -97,7 +97,19 @@ export class ProjectManager {
 
     public deleteProject = (req: express.Request, res: express.Response) => {
 
-        Response.send(res, Response.RESOURCE_DELETED);
+        // deleting project that is referred somewhere FAILS
+        let sql: string ="DELETE FROM project WHERE id=?";
+        this.database.getPool().query(sql, req.params.id, (error, results) => {
+            if (!error) {
+                if (!isNullOrUndefined(results.affectedRows) && results.affectedRows == 0) {
+                    Response.send(res, Response.RESOURCE_NOT_FOUND);
+                } else {
+                    Response.send(res, Response.RESOURCE_DELETED);
+                }
+            } else {
+                Response.send(res, Response.INTERNAL_ERROR);
+            }
+        });
     };
 
     private getProjectWithIdPromise = (id: number) => {
