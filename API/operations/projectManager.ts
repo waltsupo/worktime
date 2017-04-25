@@ -80,10 +80,8 @@ export class ProjectManager {
 
                 if (!error) {
                     if (!isNullOrUndefined(results.affectedRows) && results.affectedRows == 0) {
-                        console.log("true");
                         Response.send(res, Response.RESOURCE_NOT_FOUND);
                     } else {
-                        console.log(false);
                         Response.send(res, Response.RESOURCE_UPDATED);
                     }
                 } else {
