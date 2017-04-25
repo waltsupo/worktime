@@ -23,8 +23,8 @@ export class Routes {
         this.router.get('/categories/:projectId', this.categoryManager.getCategories);
         this.router.get('/categories/id/:id', this.categoryManager.getCategory);
         this.router.post('/categories', this.categoryManager.createCategory);
-        this.router.put('/category/:id', this.categoryManager.modifyCategory);
-        this.router.delete('/category/:id', this.categoryManager.deleteCategory);
+        this.router.put('/categories/:id', this.categoryManager.modifyCategory);
+        this.router.delete('/categories/:id', this.categoryManager.deleteCategory);
     }
 
     public getRouter() {
