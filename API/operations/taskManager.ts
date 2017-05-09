@@ -13,7 +13,10 @@ export class TaskManager {
 
     public getTasks = (req: express.Request, res: express.Response) => {
 
-        let sql: string ="SELECT * FROM task WHERE projectId=?";
+        let sql: string = "SELECT task.id as id, description, hours, date, category.name as category, user.name as user"
+            + " FROM task INNER JOIN category ON category.id = task.categoryId"
+            + " INNER JOIN user ON user.id = task.userId"
+            + " WHERE task.projectId = ?";
         this.database.getPool().query(sql, req.params.projectId, (error, results) => {
             if (!error) {
                 Response.send(res, Response.RESOURCE_FOUND, results);
@@ -25,7 +28,11 @@ export class TaskManager {
 
     public getTask = (req: express.Request, res: express.Response) => {
 
-        let sql: string ="SELECT * FROM task WHERE id=?";
+        let sql: string = "SELECT task.id as id, description, hours, date, category.name as category, user.name as user"
+            + " FROM task INNER JOIN category ON category.id = task.categoryId"
+            + " INNER JOIN user ON user.id = task.userId"
+            + " WHERE task.id = ?";
+
         this.database.getPool().query(sql, req.params.id, (error, results) => {
             if (!error) {
                 if (!isNullOrUndefined(results) && results.length > 0) {
